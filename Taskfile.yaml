@@ -3,7 +3,7 @@ version: "3"
 tasks:
   build:
     cmds:
-      - go build -o ./bin/fontman-registry ./cmd/fontman-registry
+      - go build -o ./bin/fontman-registry ./cmd/fontman
   lint:
     cmds:
       - echo "running linter"
