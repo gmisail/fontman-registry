@@ -8,8 +8,5 @@ import (
 func main() {
 	app := fiber.New()
 
-	client := db.CreateConnection()
-	client.Debug()
-
 	app.Listen(":8080")
 }
