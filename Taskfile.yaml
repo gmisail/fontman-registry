@@ -10,6 +10,9 @@ tasks:
   test:
     cmds:
       - go test .
+  generate:
+    cmds:
+      - go generate ./ent
   run:
     cmds:
       - task build
