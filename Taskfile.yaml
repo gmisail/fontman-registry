@@ -17,3 +17,5 @@ tasks:
     cmds:
       - task build
       - ./bin/fontman-registry
+    env:
+      DATABASE_FILE: data/registry.db

@@ -3,7 +3,9 @@ package db
 import (
 	"context"
 	"entgo.io/ent/dialect"
+	"fmt"
 	_ "github.com/mattn/go-sqlite3"
+	"os"
 
 	"github.com/gmisail/fontman/registry/ent"
 	"github.com/gmisail/fontman/registry/ent/migrate"
@@ -15,7 +17,8 @@ import (
 	Create a database connection, setup migration configuration.
 */
 func CreateConnection() *ent.Client {
-	client, err := ent.Open(dialect.SQLite, "registry.db?mode=memory&cache=shared&_fk=1")
+	databaseFile := os.Getenv("DATABASE_FILE")
+	client, err := ent.Open(dialect.SQLite, fmt.Sprintf("%s?mode=memory&cache=shared&_fk=1", databaseFile))
 
 	if err != nil {
 		log.Fatal(err)

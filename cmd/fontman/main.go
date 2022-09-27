@@ -1,7 +1,6 @@
 package main
 
 import (
-	"github.com/gmisail/fontman/registry/pkg/db"
 	"github.com/gofiber/fiber/v2"
 )
 
