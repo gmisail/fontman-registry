@@ -1,0 +1,23 @@
+Table font_family {
+ id uuid
+ name varchar
+ author varchar
+ uploader uuid
+ style uuid
+}
+
+Table font_style {
+ id uuid
+ url varchar
+ style varchar
+ source varchar
+}
+
+Table user {
+  id uuid
+  username str
+  email varchar
+}
+
+Ref: font_family.style < font_style.id
+Ref: font_family.uploader < user.id
