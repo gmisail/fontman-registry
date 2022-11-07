@@ -14,3 +14,6 @@ tasks:
     cmds:
       - task build
       - ./bin/fontman-registry
+  migrate:
+    cmds:
+      - cd migrations && goose sqlite3 ../data/registry.db up
