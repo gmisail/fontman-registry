@@ -18,3 +18,4 @@ data/*
 *.db
 .DS_Store
 data/registry.db
+bin/fontman-registry
