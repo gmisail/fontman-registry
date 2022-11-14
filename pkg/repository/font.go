@@ -1,19 +1,25 @@
 package repository
 
 import (
-	"github.com/gmisail/fontman/registry/pkg/model"
+	"fontman/registry/pkg/model"
+
 	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
 )
 
-func GetFontById(client *sqlx.DB, id uuid.UUID) model.Font {
+func GetFontById(client *sqlx.DB, id uuid.UUID) (*model.Font, error) {
 	var font model.Font
 
-	err := client.Get(&font, "SELECT * FROM place LIMIT 1")
+	err := client.Get(&font, `
+		SELECT id, name 
+		FROM FontFamily f
+		WHERE f.id = ?
+		LIMIT 1
+	`, id)
 
-	return font
-}
+	if err != nil {
+		return nil, err
+	}
 
-func GetFontByFamily(client *sqlx.DB, family string) model.Font {
-
+	return &font, nil
 }

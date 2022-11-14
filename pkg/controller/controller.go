@@ -6,5 +6,5 @@ import (
 )
 
 type Controller interface {
-	Setup(app *fiber.Router, db *sqlx.DB)
+	Setup(app fiber.Router, db *sqlx.DB)
 }
