@@ -28,6 +28,25 @@ func GetFontById(client *sqlx.DB, id uuid.UUID) (*model.Font, error) {
 }
 
 /**
+ * Return all font families that have the given name.
+ */
+func GetFontsByName(client *sqlx.DB, name string) ([]*model.Font, error) {
+	var fonts []*model.Font
+
+	err := client.Select(&fonts, `
+		SELECT *
+		FROM FontFamily f
+		WHERE f.name = ?
+	`, name)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return fonts, nil
+}
+
+/**
  * Get all styles for a font family.
  */
 func GetStylesByFamilyId(client *sqlx.DB, familyId uuid.UUID) ([]*model.FontStyle, error) {
@@ -37,7 +56,6 @@ func GetStylesByFamilyId(client *sqlx.DB, familyId uuid.UUID) ([]*model.FontStyl
 		SELECT *
 		FROM FontStyle f
 		WHERE f.family = ?
-		LIMIT 1
 	`, familyId)
 
 	if err != nil {

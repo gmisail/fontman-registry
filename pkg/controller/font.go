@@ -16,7 +16,11 @@ func (f *FontController) Setup(app fiber.Router, db *sqlx.DB) {
 	font := app.Group("/font")
 
 	font.Get("/:id", func(ctx *fiber.Ctx) error {
-		return GetFont(ctx, db)
+		return GetFontById(ctx, db)
+	})
+
+	font.Get("/", func(ctx *fiber.Ctx) error {
+		return GetFontsByParam(ctx, db)
 	})
 
 	font.Post("/", func(ctx *fiber.Ctx) error {
@@ -24,11 +28,11 @@ func (f *FontController) Setup(app fiber.Router, db *sqlx.DB) {
 	})
 }
 
-func GetFont(ctx *fiber.Ctx, client *sqlx.DB) error {
+func GetFontById(ctx *fiber.Ctx, client *sqlx.DB) error {
 	id := ctx.Params("id")
 	fontId := uuid.MustParse(id)
 
-	font, err := service.GetFont(client, fontId)
+	font, err := service.GetFontById(client, fontId)
 
 	if err != nil {
 		return err
@@ -38,6 +42,19 @@ func GetFont(ctx *fiber.Ctx, client *sqlx.DB) error {
 		"id":     font.Id,
 		"name":   font.Name,
 		"styles": font.Styles,
+	})
+}
+
+func GetFontsByParam(ctx *fiber.Ctx, client *sqlx.DB) error {
+	name := ctx.Query("name")
+	fonts, err := service.GetFontByName(client, name)
+
+	if err != nil {
+		return err
+	}
+
+	return ctx.JSON(fiber.Map{
+		"fonts": fonts,
 	})
 }
 

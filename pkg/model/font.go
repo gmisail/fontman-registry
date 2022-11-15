@@ -1,11 +1,15 @@
 package model
 
-import "github.com/google/uuid"
+import (
+	"database/sql"
+
+	"github.com/google/uuid"
+)
 
 type Font struct {
-	Id      uuid.UUID `db:"id"`
-	Name    string    `db:"name"`
-	License string    `db:"license"`
-	Creator string    `db:"creator"`
-	Styles  []*FontStyle
+	Id      uuid.UUID      `db:"id" json:"id"`
+	Name    string         `db:"name" json:"name"`
+	License sql.NullString `db:"license" json:"license"`
+	Creator sql.NullString `db:"creator" json:"creator"`
+	Styles  []*FontStyle   `json:"styles"`
 }

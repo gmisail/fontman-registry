@@ -11,7 +11,7 @@ import (
 /**
  * Get a font & its styles by a family ID
  */
-func GetFont(client *sqlx.DB, id uuid.UUID) (*model.Font, error) {
+func GetFontById(client *sqlx.DB, id uuid.UUID) (*model.Font, error) {
 	font, fontErr := repository.GetFontById(client, id)
 
 	if fontErr != nil {
@@ -27,6 +27,10 @@ func GetFont(client *sqlx.DB, id uuid.UUID) (*model.Font, error) {
 	font.Styles = styles
 
 	return font, nil
+}
+
+func GetFontByName(client *sqlx.DB, name string) ([]*model.Font, error) {
+	return repository.GetFontsByName(client, name)
 }
 
 func DeleteFont() {
