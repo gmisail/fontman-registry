@@ -35,8 +35,9 @@ func GetFont(ctx *fiber.Ctx, client *sqlx.DB) error {
 	}
 
 	return ctx.JSON(fiber.Map{
-		"id":   font.Id,
-		"name": font.Name,
+		"id":     font.Id,
+		"name":   font.Name,
+		"styles": font.Styles,
 	})
 }
 

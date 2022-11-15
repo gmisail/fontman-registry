@@ -7,4 +7,5 @@ type Font struct {
 	Name    string    `db:"name"`
 	License string    `db:"license"`
 	Creator string    `db:"creator"`
+	Styles  []*FontStyle
 }
