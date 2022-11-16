@@ -30,7 +30,11 @@ func (f *FontController) Setup(app fiber.Router, db *sqlx.DB) {
 
 func GetFontById(ctx *fiber.Ctx, client *sqlx.DB) error {
 	id := ctx.Params("id")
-	fontId := uuid.MustParse(id)
+	fontId, idErr := uuid.Parse(id)
+
+	if idErr != nil {
+		return idErr
+	}
 
 	font, err := service.GetFontById(client, fontId)
 
