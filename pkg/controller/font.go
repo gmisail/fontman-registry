@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fontman/registry/pkg/model"
 	"fontman/registry/pkg/service"
 
 	"github.com/gofiber/fiber/v2"
@@ -62,6 +63,29 @@ func GetFontsByParam(ctx *fiber.Ctx, client *sqlx.DB) error {
 	})
 }
 
+/*
+Expects request with structure:
+	{
+		"name": "Menlo",
+		"license": "",
+		"creator": "",
+		"styles": [
+			{ "style": "Regular", "url": "gmisail.me/regular.ttf" },
+			{ "style": "Italic", "url": "gmisail.me/italic.ttf" },
+			{ "style": "Bold", "url": "gmisail.me/bold.ttf" }
+		]
+	}
+*/
 func UploadFont(ctx *fiber.Ctx, client *sqlx.DB) error {
-	return ctx.SendString("upload font")
+	payload := model.FamilyUploadRequest{}
+
+	if err := ctx.BodyParser(&payload); err != nil {
+		return err
+	}
+
+	if err := service.UploadFont(client, payload); err != nil {
+		return err
+	}
+
+	return ctx.JSON(payload)
 }
