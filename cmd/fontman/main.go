@@ -2,16 +2,17 @@ package main
 
 import (
 	"fontman/registry/pkg/controller"
+	"log"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/mattn/go-sqlite3"
-	"log"
 )
 
 /*
 	Given a list of controllers, initialize all the routes.
 */
-func setupControllers(controllers []controller.Controller, app *fiber.Router, db *sqlx.DB) {
+func setupControllers(controllers []controller.Controller, app fiber.Router, db *sqlx.DB) {
 	for _, controller := range controllers {
 		controller.Setup(app, db)
 	}
@@ -29,7 +30,7 @@ func main() {
 	setupControllers([]controller.Controller{
 		&controller.FontController{},
 		&controller.UserController{},
-	}, &api, db)
+	}, api, db)
 
 	app.Listen(":8080")
 }

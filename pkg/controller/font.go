@@ -1,8 +1,10 @@
 package controller
 
 import (
-	"fmt"
+	"fontman/registry/pkg/service"
+
 	"github.com/gofiber/fiber/v2"
+	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -10,6 +12,56 @@ type FontController struct {
 	Controller
 }
 
-func (f *FontController) Setup(app *fiber.Router, db *sqlx.DB) {
-	fmt.Println("setup font controller")
+func (f *FontController) Setup(app fiber.Router, db *sqlx.DB) {
+	font := app.Group("/font")
+
+	font.Get("/:id", func(ctx *fiber.Ctx) error {
+		return GetFontById(ctx, db)
+	})
+
+	font.Get("/", func(ctx *fiber.Ctx) error {
+		return GetFontsByParam(ctx, db)
+	})
+
+	font.Post("/", func(ctx *fiber.Ctx) error {
+		return UploadFont(ctx, db)
+	})
+}
+
+func GetFontById(ctx *fiber.Ctx, client *sqlx.DB) error {
+	id := ctx.Params("id")
+	fontId, idErr := uuid.Parse(id)
+
+	if idErr != nil {
+		return idErr
+	}
+
+	font, err := service.GetFontById(client, fontId)
+
+	if err != nil {
+		return err
+	}
+
+	return ctx.JSON(fiber.Map{
+		"id":     font.Id,
+		"name":   font.Name,
+		"styles": font.Styles,
+	})
+}
+
+func GetFontsByParam(ctx *fiber.Ctx, client *sqlx.DB) error {
+	name := ctx.Query("name")
+	fonts, err := service.GetFontByName(client, name)
+
+	if err != nil {
+		return err
+	}
+
+	return ctx.JSON(fiber.Map{
+		"fonts": fonts,
+	})
+}
+
+func UploadFont(ctx *fiber.Ctx, client *sqlx.DB) error {
+	return ctx.SendString("upload font")
 }
