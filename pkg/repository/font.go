@@ -65,7 +65,10 @@ func GetStylesByFamilyId(client *sqlx.DB, familyId uuid.UUID) ([]*model.FontStyl
 	return styles, nil
 }
 
-func InsertFontFamily(client *sqlx.DB, name, license, creator string) error {
+/**
+ * Insert a font family.
+ */
+func InsertFontFamily(client *sqlx.DB, name, license, creator string) (uuid.UUID, error) {
 	id := uuid.New()
 
 	_, err := client.Exec(`
@@ -73,5 +76,22 @@ func InsertFontFamily(client *sqlx.DB, name, license, creator string) error {
 		VALUES (?, ?, ?, ?)
 	`, id.String(), name, license, creator)
 
-	return err
+	return id, err
+}
+
+func InsertFontStyles(client *sqlx.DB, familyId uuid.UUID, styles []model.StyleUploadRequest) error {
+	// insert each style in one shot
+	transaction := client.MustBegin()
+
+	// insert each style from the payload
+	for _, style := range styles {
+		id := uuid.New()
+
+		transaction.MustExec(`
+			INSERT INTO FontStyle (id, family, type, url)
+			VALUES (?, ?, ?, ?)
+		`, id.String(), familyId, style.Style, style.Url)
+	}
+
+	return transaction.Commit()
 }

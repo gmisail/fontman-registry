@@ -34,7 +34,7 @@ func GetFontByName(client *sqlx.DB, name string) ([]*model.Font, error) {
 }
 
 func UploadFont(client *sqlx.DB, payload model.FamilyUploadRequest) error {
-	familyErr := repository.InsertFontFamily(
+	familyId, familyErr := repository.InsertFontFamily(
 		client, payload.Name, payload.License, payload.Creator,
 	)
 
@@ -42,9 +42,7 @@ func UploadFont(client *sqlx.DB, payload model.FamilyUploadRequest) error {
 		return familyErr
 	}
 
-	/** insert styles */
-
-	return nil
+	return repository.InsertFontStyles(client, familyId, payload.Styles)
 }
 
 func DeleteFont() {
