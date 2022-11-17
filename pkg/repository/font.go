@@ -64,3 +64,14 @@ func GetStylesByFamilyId(client *sqlx.DB, familyId uuid.UUID) ([]*model.FontStyl
 
 	return styles, nil
 }
+
+func InsertFontFamily(client *sqlx.DB, name, license, creator string) error {
+	id := uuid.New()
+
+	_, err := client.Exec(`
+		INSERT INTO FontFamily (id, name, license, creator)
+		VALUES (?, ?, ?, ?)
+	`, id.String(), name, license, creator)
+
+	return err
+}
