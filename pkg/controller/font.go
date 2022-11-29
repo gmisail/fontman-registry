@@ -52,6 +52,12 @@ func GetFontById(ctx *fiber.Ctx, client *sqlx.DB) error {
 
 func GetFontsByParam(ctx *fiber.Ctx, client *sqlx.DB) error {
 	name := ctx.Query("name")
+
+	// no name provided? Send back empty list
+	if len(name) == 0 {
+		return ctx.JSON(fiber.Map{"fonts": []*model.Font{}})
+	}
+
 	fonts, err := service.GetFontByName(client, name)
 
 	if err != nil {
