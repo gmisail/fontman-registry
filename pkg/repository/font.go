@@ -31,13 +31,13 @@ func GetFontById(client *sqlx.DB, id uuid.UUID) (*model.Font, error) {
  * Return all font families that have the given name.
  */
 func GetFontsByName(client *sqlx.DB, name string) ([]*model.Font, error) {
-	var fonts []*model.Font
+	fonts := []*model.Font{}
 
 	err := client.Select(&fonts, `
 		SELECT *
 		FROM FontFamily f
-		WHERE f.name = ?
-	`, name)
+		WHERE f.name LIKE ?
+	`, "%"+name+"%")
 
 	if err != nil {
 		return nil, err
