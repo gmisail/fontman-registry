@@ -3,6 +3,7 @@ package main
 import (
 	"fontman/registry/pkg/controller"
 	"log"
+	"os"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/jmoiron/sqlx"
@@ -32,5 +33,12 @@ func main() {
 		&controller.UserController{},
 	}, api, db)
 
-	app.Listen(":8080")
+	port := os.Getenv("PORT")
+
+	// default port to 8080 if PORT is undefined
+	if len(port) == 0 {
+		port = "8080"
+	}
+
+	app.Listen(":" + port)
 }

@@ -11,6 +11,4 @@ RUN go build -o ./bin/fontman-registry ./cmd/fontman
 RUN go install github.com/pressly/goose/v3/cmd/goose@latest
 RUN cd migrations && goose sqlite3 ../data/registry.db up
 
-EXPOSE 8080
-
 ENTRYPOINT ["./bin/fontman-registry"]
