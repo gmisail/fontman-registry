@@ -7,7 +7,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/jmoiron/sqlx"
-	_ "github.com/mattn/go-sqlite3"
+	_ "github.com/lib/pq"
 )
 
 /*
@@ -20,10 +20,13 @@ func setupControllers(controllers []controller.Controller, app fiber.Router, db 
 }
 
 func main() {
-	db, err := sqlx.Connect("sqlite3", "data/registry.db")
+	db, err := sqlx.Connect("postgres", "postgres://fontman:fontman@database/dev?sslmode=disable")
+
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	log.Println("Connected to PostgreSQL")
 
 	app := fiber.New()
 	api := app.Group("/api")

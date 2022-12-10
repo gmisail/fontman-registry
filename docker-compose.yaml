@@ -18,7 +18,7 @@ services:
     environment:
       - POSTGRES_HOST_AUTH_METHOD=trust
       - POSTGRES_USER=fontman  
-      - POSTGRES_PASSWOR=fontman
+      - POSTGRES_PASSWORD=fontman
       - POSTGRES_DB=dev
     ports:
       - '5432:5432'
