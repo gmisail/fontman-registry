@@ -1,13 +1,12 @@
 package main
 
 import (
+	"fontman/registry/pkg/database"
 	"fontman/registry/pkg/controller"
-	"log"
 	"os"
 
-	"github.com/gofiber/fiber/v2"
 	"github.com/jmoiron/sqlx"
-	_ "github.com/lib/pq"
+	"github.com/gofiber/fiber/v2"
 )
 
 /*
@@ -20,13 +19,7 @@ func setupControllers(controllers []controller.Controller, app fiber.Router, db 
 }
 
 func main() {
-	db, err := sqlx.Connect("postgres", "postgres://fontman:fontman@database/dev?sslmode=disable")
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	log.Println("Connected to PostgreSQL")
+	db := database.OpenDatabase() 
 
 	app := fiber.New()
 	api := app.Group("/api")
