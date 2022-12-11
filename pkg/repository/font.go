@@ -16,7 +16,7 @@ func GetFontById(client *sqlx.DB, id uuid.UUID) (*model.Font, error) {
 	err := client.Get(&font, `
 		SELECT id, name 
 		FROM FontFamily f
-		WHERE f.id = ?
+		WHERE f.id = $1
 		LIMIT 1
 	`, id)
 
@@ -36,7 +36,7 @@ func GetFontsByName(client *sqlx.DB, name string) ([]*model.Font, error) {
 	err := client.Select(&fonts, `
 		SELECT *
 		FROM FontFamily f
-		WHERE f.name LIKE ?
+		WHERE f.name LIKE $1
 	`, "%"+name+"%")
 
 	if err != nil {
@@ -55,7 +55,7 @@ func GetStylesByFamilyId(client *sqlx.DB, familyId uuid.UUID) ([]*model.FontStyl
 	err := client.Select(&styles, `
 		SELECT *
 		FROM FontStyle f
-		WHERE f.family = ?
+		WHERE f.family = $1
 	`, familyId)
 
 	if err != nil {
@@ -73,7 +73,7 @@ func InsertFontFamily(client *sqlx.DB, name, license, creator string) (uuid.UUID
 
 	_, err := client.Exec(`
 		INSERT INTO FontFamily (id, name, license, creator)
-		VALUES (?, ?, ?, ?)
+		VALUES ($1, $2, $3, $4)
 	`, id.String(), name, license, creator)
 
 	return id, err
@@ -93,7 +93,7 @@ func InsertFontStyles(client *sqlx.DB, familyId uuid.UUID, styles []model.StyleU
 
 		_, insertErr := transaction.Exec(`
 			INSERT INTO FontStyle (id, family, type, url)
-			VALUES (?, ?, ?, ?)
+			VALUES ($1, $2, $3, $4)
 		`, id.String(), familyId, style.Style, style.Url)
 
 		// we failed somewhere, abort the transaction and return the error

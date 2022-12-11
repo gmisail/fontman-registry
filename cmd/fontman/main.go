@@ -1,13 +1,12 @@
 package main
 
 import (
+	"fontman/registry/pkg/database"
 	"fontman/registry/pkg/controller"
-	"log"
 	"os"
 
-	"github.com/gofiber/fiber/v2"
 	"github.com/jmoiron/sqlx"
-	_ "github.com/mattn/go-sqlite3"
+	"github.com/gofiber/fiber/v2"
 )
 
 /*
@@ -20,10 +19,7 @@ func setupControllers(controllers []controller.Controller, app fiber.Router, db 
 }
 
 func main() {
-	db, err := sqlx.Connect("sqlite3", "data/registry.db")
-	if err != nil {
-		log.Fatal(err)
-	}
+	db := database.OpenDatabase() 
 
 	app := fiber.New()
 	api := app.Group("/api")
