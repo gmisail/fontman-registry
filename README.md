@@ -32,7 +32,7 @@ Now your database is up-to-date!
 ### Step 3
 
 Make sure that the `PORT` and `DATABASE_URL` environment variables are set. The former will be which port the server will run on (defaults to 8080),
-while the latter is the URL of your database ("postgres://user:pass@database/name").
+while the latter is the URL of your database (`"postgres://user:pass@database/name"`).
 
 You are now all set! Simply run `./bin/fontman-registry`.
 
